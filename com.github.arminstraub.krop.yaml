@@ -12,8 +12,6 @@ cleanup-commands:
 build-options:
   env:
     - BASEAPP_REMOVE_WEBENGINE=1
-finish-args:
-  - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
 
 command: krop
 
@@ -29,6 +27,7 @@ finish-args:
   # Without dri Qt prints "libEGL warning: wayland-egl: could not open /dev/dri/card0"
   - --device=dri
   - --env=PATH=/app/bin:/app/dev/bin:/usr/bin
+  - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
 
 modules:
   - name: PyQtApp
