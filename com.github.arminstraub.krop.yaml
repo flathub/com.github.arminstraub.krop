@@ -16,11 +16,6 @@ build-options:
 command: krop
 
 finish-args:
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-download
-  - --filesystem=xdg-music
-  - --filesystem=/run/media
-  - --filesystem=/media
   - --share=ipc
   - --socket=fallback-x11
   - --socket=wayland
