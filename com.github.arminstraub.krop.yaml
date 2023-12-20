@@ -81,7 +81,7 @@ modules:
     buildsystem: simple
     build-commands:
       - install -Dm644 krop.svg /app/share/icons/hicolor/scalable/apps/com.github.arminstraub.krop.svg
-      - python3 setup.py install --prefix=/app --root=/
+      - pip3 install --prefix=/app .
     post-install:
       - cp krop.desktop com.github.arminstraub.krop.desktop
       - desktop-file-edit --set-key="Icon" --set-value="com.github.arminstraub.krop" com.github.arminstraub.krop.desktop
