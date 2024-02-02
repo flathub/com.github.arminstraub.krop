@@ -16,11 +16,6 @@ build-options:
 command: krop
 
 finish-args:
-  - --filesystem=xdg-documents
-  - --filesystem=xdg-download
-  - --filesystem=xdg-music
-  - --filesystem=/run/media
-  - --filesystem=/media
   - --share=ipc
   - --socket=fallback-x11
   - --socket=wayland
@@ -61,8 +56,12 @@ modules:
       - /include
     sources:
       - type: archive
-        url: https://poppler.freedesktop.org/poppler-23.11.0.tar.xz
-        sha256: f99cca6799cb9cb6c92fc1e0eb78547b611cb733750ab7cb047cb0e6c246539c
+        url: https://poppler.freedesktop.org/poppler-24.02.0.tar.xz
+        sha256: 19187a3fdd05f33e7d604c4799c183de5ca0118640c88b370ddcf3136343222e
+        x-checker-data:
+          type: anitya
+          project-id: 3686
+          url-template: https://poppler.freedesktop.org/poppler-${version}.tar.xz
 
   - name: python-poppler-qt5
     buildsystem: simple
@@ -77,7 +76,7 @@ modules:
     buildsystem: simple
     build-commands:
       - install -Dm644 krop.svg /app/share/icons/hicolor/scalable/apps/com.github.arminstraub.krop.svg
-      - python3 setup.py install --prefix=/app --root=/
+      - pip3 install --prefix=/app .
     post-install:
       - cp krop.desktop com.github.arminstraub.krop.desktop
       - desktop-file-edit --set-key="Icon" --set-value="com.github.arminstraub.krop" com.github.arminstraub.krop.desktop
