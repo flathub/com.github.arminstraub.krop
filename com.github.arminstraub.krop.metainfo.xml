@@ -32,6 +32,15 @@
   <update_contact>nbenitezl_AT_gmail.com</update_contact>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.6.0.fl1" date="2024-08-10">
+    <description>
+      <ul>
+        <li>Update Poppler to 24.08.0</li>
+        <li>Change build process from calling deprecated setup.py to using "pip3 install"</li>
+        <li>Remove unnecessary xdg-dirs permissions as they are now handled via file system portal</li>
+      </ul>
+    </description>
+    </release>
     <release version="0.6.0" date="2020-06-09">
     <description>0.6.0 release</description>
     <url>https://github.com/arminstraub/krop/releases/tag/v0.6.0</url>
