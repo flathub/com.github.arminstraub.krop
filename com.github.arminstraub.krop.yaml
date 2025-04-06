@@ -1,98 +1,39 @@
----
 app-id: com.github.arminstraub.krop
-
 runtime: org.kde.Platform
-runtime-version: '5.15-24.08'
+runtime-version: '6.8'
 sdk: org.kde.Sdk
-
 base: com.riverbankcomputing.PyQt.BaseApp
-base-version: '5.15-24.08'
+base-version: '6.8'
 cleanup-commands:
   - /app/cleanup-BaseApp.sh
 build-options:
   env:
     - BASEAPP_REMOVE_WEBENGINE=1
-
 command: krop
-
+rename-desktop-file: com.arminstraub.krop.desktop
+rename-appdata-file: com.arminstraub.krop.metainfo.xml
+rename-icon: com.arminstraub.krop
 finish-args:
   - --share=ipc
   - --socket=fallback-x11
   - --socket=wayland
   # Without dri Qt prints "libEGL warning: wayland-egl: could not open /dev/dri/card0"
   - --device=dri
-  - --env=PATH=/app/bin:/app/dev/bin:/usr/bin
-  - --env=QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
+cleanup:
+  - /share/man
 
 modules:
-  - name: PyQtApp
-
-# Generated with flatpak-pip-generator --runtime=org.kde.Sdk//5.15-23.08 --yaml PyPDF2==2.12.1
-# Using outdated PyPDF2 because krop v0.6.0 does not support PyPDF2 v.3 or new pypdf
-  - name: python3-PyPDF2
-    buildsystem: simple
-    build-commands:
-      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} "PyPDF2==2.12.1" --no-build-isolation
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/2e/40/4f997b7cf72d89bb5aafd57b01dfa0be4e9560c8e5b993fde3986b3904f9/pypdf2-2.12.1-py3-none-any.whl
-        sha256: 41ff16ee122bad9790d57a4235281a838002d7f1cc8d631d91b6f65d709bd825
-
-  - name: poppler
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_INSTALL_LIBDIR=/app/lib
-      - -DCMAKE_INSTALL_INCLUDEDIR=/app/include
-      - -DBUILD_QT5_TESTS=OFF
-      - -DBUILD_GTK_TESTS=OFF
-      - -DBUILD_CPP_TESTS=OFF
-      - -DBUILD_MANUAL_TESTS=OFF
-      - -DENABLE_BOOST=OFF
-      - -DENABLE_LIBOPENJPEG=none
-      - -DENABLE_UTILS=OFF
-      - -DENABLE_QT6=OFF
-    cleanup:
-      - /bin
-      - /include
-    sources:
-      - type: archive
-        url: https://poppler.freedesktop.org/poppler-24.08.0.tar.xz
-        sha256: 97453fbddf0c9a9eafa0ea45ac710d3d49bcf23a62e864585385d3c0b4403174
-        #x-checker-data:
-        #  type: anitya
-        #  project-id: 3686
-        #  url-template: https://poppler.freedesktop.org/poppler-${version}.tar.xz
-
-  - name: python-poppler-qt5
-    buildsystem: simple
-    build-commands:
-      - sip-install --verbose --target-dir /app/lib/python/site-packages
-    sources:
-      - type: archive
-        url: https://github.com/frescobaldi/python-poppler-qt5/archive/refs/tags/v21.3.0.zip
-        sha256: 208f23089046eebe5db1e169a9f4873c35fe3f6c83b87eff177070367e1ede41
+  - python3-pymupdf.json
 
   - name: krop
     buildsystem: simple
     build-commands:
-      - install -Dm644 krop.svg /app/share/icons/hicolor/scalable/apps/com.github.arminstraub.krop.svg
-      - pip3 install --prefix=/app .
-    post-install:
-      - cp krop.desktop com.github.arminstraub.krop.desktop
-      - desktop-file-edit --set-key="Icon" --set-value="com.github.arminstraub.krop" com.github.arminstraub.krop.desktop
-      - desktop-file-edit --remove-category=KDE com.github.arminstraub.krop.desktop
-      - desktop-file-install --delete-original --dir=/app/share/applications com.github.arminstraub.krop.desktop
-      - install -Dm644 -t /app/share/metainfo com.github.arminstraub.krop.metainfo.xml
+      - pip3 install --prefix=${FLATPAK_DEST} .
     sources:
-      - type: archive
-        url: https://github.com/arminstraub/krop/archive/refs/tags/v0.6.0.tar.gz
-        sha256: 97022416ec4f2ff70e0ab38d3f3aaff83a68dca99f3e273c29e9f3dd72bf88d9
-      - type: file
-        url: https://upload.wikimedia.org/wikipedia/commons/8/89/Gnome-edit-cut.svg
-        sha256: 4e334a6d26a7f374eca85f7d9ebcf29fb09a7fd6fb564b9445cb97b28ec402eb
-        dest-filename: krop.svg
-      - type: file
-        path: com.github.arminstraub.krop.metainfo.xml
-
-cleanup:
-  - /share/man
+      - type: git
+        url: https://github.com/arminstraub/krop.git
+        tag: v0.7.0
+        commit: 2d8f7dd20106963d70bc44ed4a571fcf41d9e1a5
+        x-checker-data:
+          type: git
+          tag-pattern: v([\d.]+)
